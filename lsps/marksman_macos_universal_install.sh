@@ -9,15 +9,15 @@ INSTALL_DIR="$LSP_DIR/bin"
 MARKSMAN_URL="https://github.com/artempyanykh/marksman/releases/download/2024-12-18/marksman-macos"
 
 install_marksman() {
-  echo "Installing Marksman..."
-  rm -rf "$MARKSMAN_DIR"
-  mkdir -p "$MARKSMAN_DIR"
-  curl -L "$MARKSMAN_URL" -o "$MARKSMAN_DIR/marksman"
-  chmod +x "$MARKSMAN_DIR/marksman"
-  echo "Marksman installed in $MARKSMAN_DIR"
-  # Create a link to the Marksman executable
-  ln -s "$MARKSMAN_DIR/marksman" "$INSTALL_DIR/marksman"
-  echo "Created link to Marksman at $INSTALL_DIR/marksman"
+	echo "Installing Marksman..."
+	rm -rf "$MARKSMAN_DIR"
+	mkdir -p "$MARKSMAN_DIR"
+	curl -L "$MARKSMAN_URL" -o "$MARKSMAN_DIR/marksman"
+	chmod +x "$MARKSMAN_DIR/marksman"
+	echo "Marksman installed in $MARKSMAN_DIR"
+	# Create a link to the Marksman executable
+	ln -s "$MARKSMAN_DIR/marksman" "$INSTALL_DIR/marksman"
+	echo "Created link to Marksman at $INSTALL_DIR/marksman"
 }
 
 mkdir -p "$PREFIX"

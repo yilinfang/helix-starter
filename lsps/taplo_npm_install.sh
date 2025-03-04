@@ -8,28 +8,28 @@ INSTALL_DIR="$LSP_DIR/bin"
 NODEJS_DIR="$PREFIX/nodejs"
 
 # Check npm availability
-if ! command -v npm &> /dev/null; then
-  # Import Node.js to PATH
-  if [ -d "$NODEJS_DIR" ]; then
-    export PATH=$NODEJS_DIR/bin:$PATH
-    echo "Use bundled Node.js at $NODEJS_DIR"
-  else
-    echo "Error: npm is not available. Please install Node.js first."
-    exit 1
-  fi
+if ! command -v npm &>/dev/null; then
+	# Import Node.js to PATH
+	if [ -d "$NODEJS_DIR" ]; then
+		export PATH=$NODEJS_DIR/bin:$PATH
+		echo "Use bundled Node.js at $NODEJS_DIR"
+	else
+		echo "Error: npm is not available. Please install Node.js first."
+		exit 1
+	fi
 fi
 
 # Install Taplo
 install_taplo() {
-  echo "Installing Taplo..."
-  rm -rf "$TAPLO_DIR"
-  mkdir -p "$TAPLO_DIR"
-  npm install --prefix "$TAPLO_DIR" @taplo/cli
-  echo "Taplo installed in $TAPLO_DIR"
+	echo "Installing Taplo..."
+	rm -rf "$TAPLO_DIR"
+	mkdir -p "$TAPLO_DIR"
+	npm install --prefix "$TAPLO_DIR" @taplo/cli
+	echo "Taplo installed in $TAPLO_DIR"
 
-  # Create a link to the Taplo executables
-  ln -s "$TAPLO_DIR/node_modules/.bin/taplo" "$INSTALL_DIR/taplo"
-  echo "Created link to taplo at $INSTALL_DIR/taplo"
+	# Create a link to the Taplo executables
+	ln -s "$TAPLO_DIR/node_modules/.bin/taplo" "$INSTALL_DIR/taplo"
+	echo "Created link to taplo at $INSTALL_DIR/taplo"
 }
 
 mkdir -p "$PREFIX"
