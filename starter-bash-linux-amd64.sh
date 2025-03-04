@@ -303,12 +303,12 @@ fi
 # Set some aliases
 
 # If ze is available, use it for Zellij
-if [ -f "$INSTALL_DIR/zellij" && ! command -v ze >/dev/null ]; then
+if [[ -f "$INSTALL_DIR/zellij" && ! \$(command -v ze >/dev/null) ]]; then
   alias ze="zellij"
 fi
 
 # If lg is available, use it for lazygit
-if [ -f "$INSTALL_DIR/lazygit" && ! command -v lg >/dev/null ]; then
+if [[ -f "$INSTALL_DIR/lazygit" && ! \$(command -v lg >/dev/null) ]]; then
   alias lg="lazygit"
 fi
 EOF
