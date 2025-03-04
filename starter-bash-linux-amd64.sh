@@ -368,14 +368,24 @@ main() {
 			esac
 		done
 	fi
-
-	# Update fish shell configuration
+	# Update shell configuration
 	if [ $UPDATE_SHELL_CONFIGURATION -eq 1 ]; then
 		create_shell_init_script
 
-		# Create .bashrc if it doesn't exist
+		# Define .bashrc file path
 		BASHRC_FILE="$HOME/.bashrc"
-		touch "$BASHRC_FILE"
+		BACKUP_FILE="$HOME/.bashrc.bak"
+
+		# Check if .bashrc exists
+		if [ -f "$BASHRC_FILE" ]; then
+			# Backup the existing .bashrc
+			cp "$BASHRC_FILE" "$BACKUP_FILE"
+			echo "Backup of .bashrc created at $BACKUP_FILE"
+		else
+			# Create a new .bashrc file
+			touch "$BASHRC_FILE"
+			echo "Created new .bashrc file at $BASHRC_FILE"
+		fi
 
 		# Add source line if not already present
 		if ! grep -q "source $PREFIX/init.sh" "$BASHRC_FILE"; then

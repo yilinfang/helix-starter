@@ -373,10 +373,23 @@ main() {
 	if [ $UPDATE_SHELL_CONFIGURATION -eq 1 ]; then
 		create_shell_init_script
 
-		# Create config.fish if it doesn't exist
+		# Define config.fish file path
 		FISH_CONFIG_FILE="$HOME/.config/fish/config.fish"
+		BACKUP_FILE="$HOME/.config/fish/config.fish.bak"
+
+		# Ensure the directory exists
 		mkdir -p "$(dirname "$FISH_CONFIG_FILE")"
-		touch "$FISH_CONFIG_FILE"
+
+		# Check if config.fish exists
+		if [ -f "$FISH_CONFIG_FILE" ]; then
+			# Backup the existing config.fish
+			cp "$FISH_CONFIG_FILE" "$BACKUP_FILE"
+			echo "Backup of config.fish created at $BACKUP_FILE"
+		else
+			# Create a new config.fish file
+			touch "$FISH_CONFIG_FILE"
+			echo "Created new config.fish file at $FISH_CONFIG_FILE"
+		fi
 
 		# Add source line if not already present
 		if ! grep -q "source $PREFIX/init.fish" "$FISH_CONFIG_FILE"; then
@@ -385,6 +398,7 @@ main() {
 			echo "if test -f $PREFIX/init.fish" >>"$FISH_CONFIG_FILE"
 			echo "    source $PREFIX/init.fish" >>"$FISH_CONFIG_FILE"
 			echo "end" >>"$FISH_CONFIG_FILE"
+			echo "Added initialization script to $FISH_CONFIG_FILE"
 		fi
 	fi
 
