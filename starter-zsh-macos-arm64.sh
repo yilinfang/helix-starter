@@ -245,10 +245,20 @@ install_yazi() {
 	if [ -n "$YAZI_BINARY" ]; then
 		# Create a symbolic link to the Yazi binary
 		ln -s "$YAZI_BINARY" "$INSTALL_DIR/yazi"
-		echo "Created link to Yazi at $INSTALL_DIR/yazi"
+		echo "Created link to yazi at $INSTALL_DIR/yazi"
 		UPDATE_SHELL_CONFIGURATION=1
 	else
-		echo "Error: Yazi binary not found in the extracted files."
+		echo "Error: yazi binary not found in the extracted files."
+	fi
+
+	YA_BINARY=$(find "$YAZI_DIR" -type f -name "ya" | head -n 1)
+	if [ -n "$YA_BINARY" ]; then
+		# Create a symbolic link to the ya binary
+		ln -s "$YA_BINARY" "$INSTALL_DIR/ya"
+		echo "Created link to Yazi at $INSTALL_DIR/ya"
+		UPDATE_SHELL_CONFIGURATION=1
+	else
+		echo "Error: ya binary not found in the extracted files."
 	fi
 }
 
@@ -294,13 +304,23 @@ if [ -f "$INSTALL_DIR/zoxide" ]; then
   eval "\$(zoxide init zsh)"
 fi
 
+# Add yazi binding if yazi is installed and y is available
+if [[ -f "$INSTALL_DIR/yazi" && ! \$(command -v y >/dev/null) ]]; then
+  function y() {
+    local tmp="\$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "\$@" --cwd-file="\$tmp"
+    if cwd="\$(command cat -- "\$tmp")" && [ -n "\$cwd" ] && [ "\$cwd" != "\$PWD" ]; then
+      builtin cd -- "\$cwd"
+    fi
+    rm -f -- "\$tmp"
+  }
+fi
+
 # Set EDITOR and VISUAL to Helix if installed
 if [ -f "$INSTALL_DIR/hx" ]; then
   export EDITOR="hx"
   export VISUAL="hx"
 fi
-
-# Set some aliases
 
 # If ze is available, use it for Zellij
 if [[ -f "$INSTALL_DIR/zellij" && ! \$(command -v ze >/dev/null) ]]; then
