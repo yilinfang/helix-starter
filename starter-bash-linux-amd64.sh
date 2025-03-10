@@ -18,6 +18,7 @@ FZF_DIR="$PREFIX/fzf"
 LAZYGIT_DIR="$PREFIX/lazygit"
 ZOXIDE_DIR="$PREFIX/zoxide"
 YAZI_DIR="$PREFIX/yazi"
+SAD_DIR="$PREFIX/sad"
 HELIX_CONFIG_DIR="$HOME/.config/helix"
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 TMUX_CONFIG_DIR="$HOME/.config/tmux"
@@ -35,6 +36,7 @@ FZF_URL="https://github.com/junegunn/fzf/releases/download/v0.60.3/fzf-0.60.3-li
 LAZYGIT_URL="https://github.com/jesseduffield/lazygit/releases/download/v0.48.0/lazygit_0.48.0_Linux_x86_64.tar.gz"
 ZOXIDE_URL="https://github.com/ajeetdsouza/zoxide/releases/download/v0.9.7/zoxide-0.9.7-x86_64-unknown-linux-musl.tar.gz"
 YAZI_URL="https://github.com/sxyazi/yazi/releases/download/v25.3.2/yazi-x86_64-unknown-linux-musl.zip"
+SAD_URL="https://github.com/ms-jpq/sad/releases/download/v0.4.32/x86_64-unknown-linux-musl.zip"
 
 # Configuration repositories
 NVIM_CONFIG_REPO="https://github.com/yilinfang/nvim.git"
@@ -58,9 +60,10 @@ show_menu() {
 	echo "8. lazygit"
 	echo "9. zoxide"
 	echo "10. Yazi"
-	echo "11. Helix config"
-	echo "12. tmux config"
-	echo "13. Zellij config"
+	echo "11. sad"
+	echo "12. Helix config"
+	echo "13. tmux config"
+	echo "14. Zellij config"
 	echo "t. Tool bundle with Oh my tmux!"
 	echo "z. Tool bundle with Zellij"
 	echo "a. Install all"
@@ -263,6 +266,23 @@ install_yazi() {
 
 }
 
+install_sad() {
+	echo "Installing sad..."
+	rm -rf "$SAD_DIR"
+	mkdir -p "$SAD_DIR"
+	curl -L "$SAD_URL" -o "$TEMP_DIR/sad.zip"
+	unzip "$TEMP_DIR/sad.zip" -d "$SAD_DIR"
+	SAD_BINARY=$(find "$SAD_DIR" -type f -name "sad" | head -n 1)
+	if [ -n "$SAD_BINARY" ]; then
+		# Create a symbolic link to the sad binary
+		ln -s "$SAD_BINARY" "$INSTALL_DIR/sad"
+		echo "Created link to sad at $INSTALL_DIR/sad"
+		UPDATE_SHELL_CONFIGURATION=1
+	else
+		echo "Error: sad binary not found in the extracted files."
+	fi
+}
+
 install_helix_config() {
 	echo "Installing Helix configuration..."
 	rm -rf "$HELIX_CONFIG_DIR"
@@ -357,6 +377,7 @@ main() {
 		install_lazygit
 		install_zoxide
 		install_yazi
+		install_sad
 		install_helix_config
 		install_tmux_config
 		install_zellij_config
@@ -370,6 +391,7 @@ main() {
 		install_lazygit
 		install_zoxide
 		install_yazi
+		install_sad
 		install_helix_config
 		install_tmux_config
 	elif [[ "$CHOICE" == "z" ]]; then
@@ -383,6 +405,7 @@ main() {
 		install_lazygit
 		install_zoxide
 		install_yazi
+		install_sad
 		install_helix_config
 		install_zellij_config
 	elif [[ "$CHOICE" == "i" ]]; then
@@ -400,9 +423,10 @@ main() {
 			8) install_lazygit ;;
 			9) install_zoxide ;;
 			10) install_yazi ;;
-			11) install_helix_config ;;
-			12) install_tmux_config ;;
-			13) install_zellij_config ;;
+			11) install_sad ;;
+			12) install_helix_config ;;
+			13) install_tmux_config ;;
+			14) install_zellij_config ;;
 			*) echo "Invalid option: $num" ;;
 			esac
 		done
